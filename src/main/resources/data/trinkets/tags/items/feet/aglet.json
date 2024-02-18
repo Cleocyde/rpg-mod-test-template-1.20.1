@@ -1,0 +1,7 @@
+{
+  "drop_rule": "keep",
+  "replace": false,
+  "values": [
+    "rpgmod:bottes_garde_royal"
+  ]
+}
