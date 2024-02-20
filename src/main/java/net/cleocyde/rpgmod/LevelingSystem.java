@@ -1,7 +1,5 @@
 package net.cleocyde.rpgmod;
 
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardCriterion;
@@ -9,8 +7,7 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
-import net.minecraft.world.World;
-import org.apache.logging.log4j.core.util.Source;
+
 
 public class LevelingSystem {
     private int experience;
@@ -110,7 +107,6 @@ public class LevelingSystem {
 
 
     private int getExperienceNeededToLevelUp() {
-        // This is just an example. You might want a more complex formula for leveling up.
 
         return this.experienceNeededToLevelUp;
     }
@@ -131,5 +127,4 @@ public class LevelingSystem {
         player.sendMessage(message, true); // The second parameter indicates that this is an action bar message.
     }*/
 
-    // Add more methods for handling other events that should give experience.
 }

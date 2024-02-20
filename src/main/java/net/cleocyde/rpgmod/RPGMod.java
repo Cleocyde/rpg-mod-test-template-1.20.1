@@ -30,18 +30,19 @@ public class RPGMod implements ModInitializer {
 	}
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Hello Fabric world!");
+		LOGGER.info("Fuck minecraft modding");
 
 		// REGISTER ITEMS
 		ModItems.registerModItems();
 
-
+		// KEEP XP ON DEATH
 		ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> {
 			newPlayer.experienceLevel = oldPlayer.experienceLevel;
 			newPlayer.experienceProgress = oldPlayer.experienceProgress;
 			newPlayer.totalExperience = oldPlayer.totalExperience;
 		});
 
+		//HEAL PLAYERS ON RESPAWN
 		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
 			CustomHealthSystem healthSystem = getHealthSystems().get(newPlayer);
 			if (healthSystem != null) {
@@ -49,7 +50,7 @@ public class RPGMod implements ModInitializer {
 			}
 		});
 
-
+		// SETHEALTH COMMAND
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, environment) -> {
 			dispatcher.register(CommandManager.literal("setHealth")
 					.then(CommandManager.argument("player", EntityArgumentType.player())
@@ -87,7 +88,6 @@ public class RPGMod implements ModInitializer {
 				LevelingSystem levelingSystem = levelingSystems.get(player);
 				CustomHealthSystem healthSystem = healthSystems.get(player);
 				if (levelingSystem != null && healthSystem != null) {
-					//levelingSystem.updateActionBar(player);
 					healthSystem.updateActionBar(player);
 				}
 			}
@@ -98,30 +98,27 @@ public class RPGMod implements ModInitializer {
 		ServerPlayerEntity player = EntityArgumentType.getPlayer(context, "player");
 		int xp = IntegerArgumentType.getInteger(context, "xp");
 
-		// Use your LevelingSystem class to give the player XP.
 		LevelingSystem levelingSystem = levelingSystems.get(player);
 		if (levelingSystem != null) {
 			levelingSystem.addExperience(xp, player);
 		}
 
-		return 1; // Return a success result.
+		return 1;
 	}
 
 	private int executeSetLevel(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
 		ServerPlayerEntity player = EntityArgumentType.getPlayer(context, "player");
 		int level = IntegerArgumentType.getInteger(context, "level");
 
-		// Use your LevelingSystem class to set the player's level.
 		LevelingSystem levelingSystem = levelingSystems.get(player);
 		CustomHealthSystem healthSystem = healthSystems.get(player);
 		if (levelingSystem != null && healthSystem != null) {
 			levelingSystem.setLevel(level, player);
 			healthSystem.levelUp(player, level);
-			//levelingSystem.updateActionBar(player);
 			healthSystem.updateActionBar(player);
 		}
 
-		return 1; // Return a success result.
+		return 1;
 	}
 
 
@@ -130,14 +127,13 @@ public class RPGMod implements ModInitializer {
 		ServerPlayerEntity player = EntityArgumentType.getPlayer(context, "player");
 		int health = IntegerArgumentType.getInteger(context, "health");
 
-		// Use your CustomHealthSystem class to set the player's health.
 		CustomHealthSystem healthSystem = healthSystems.get(player);
 		if (healthSystem != null) {
 			healthSystem.setHealth(player, health);
 			healthSystem.updateActionBar(player);
 		}
 
-		return 1; // Return a success result.
+		return 1;
 	}
 
 }

@@ -3,7 +3,7 @@ package net.cleocyde.rpgmod;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.world.World;
+
 
 public class CustomHealthSystem {
     private float maxHealth;
