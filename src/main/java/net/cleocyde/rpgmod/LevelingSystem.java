@@ -1,5 +1,7 @@
 package net.cleocyde.rpgmod;
 
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardCriterion;
@@ -8,12 +10,13 @@ import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.core.util.Source;
 
 public class LevelingSystem {
     private int experience;
     private int level;
     private int experienceNeededToLevelUp;
-    private int experienceNeededToLevelUpFromPreviousLevel;
+
     private ScoreboardObjective levelObjective;
     private ScoreboardObjective totalXpObjective;
     private ScoreboardObjective xpToNextLevelObjective;
@@ -22,7 +25,6 @@ public class LevelingSystem {
         this.experience = 0;
         this.level = 1;
         this.experienceNeededToLevelUp = 110;
-        this.experienceNeededToLevelUpFromPreviousLevel = 0;
 
 
         // Create new objectives on the scoreboard for the player's level, total XP, and XP to next level.
@@ -59,6 +61,7 @@ public class LevelingSystem {
             this.experienceNeededToLevelUp = calculateExperienceNeededToLevelUp(nextLevel); // Calculate the experience needed for the next level
             this.level++;
 
+            player.heal(8000f);
             // If the player's level has reached 200 after leveling up.
             if (this.level >= 200) {
                 this.level = 200; // Ensure the level does not exceed 200.
@@ -71,6 +74,12 @@ public class LevelingSystem {
         updateScore(player, this.levelObjective, this.level);
         updateScore(player, this.totalXpObjective, this.experience);
         updateScore(player, this.xpToNextLevelObjective, getExperienceNeededToLevelUp() - this.experience);
+
+        player.experienceProgress = (float)this.experience / (float)getExperienceNeededToLevelUp();
+        player.experienceLevel = this.level;
+
+        player.addExperienceLevels(0);
+
     }
 
 

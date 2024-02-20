@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -29,6 +30,11 @@ public class RPGMod implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("Hello Fabric world!");
 
+		ServerTickEvents.END_SERVER_TICK.register(server -> {
+			for (PlayerEntity player : server.getPlayerManager().getPlayerList()) {
+				player.getHungerManager().setFoodLevel(20);
+			}
+		});
 
 		// REGISTER ITEMS
 		ModItems.registerModItems();
@@ -79,6 +85,7 @@ public class RPGMod implements ModInitializer {
 		int level = player.experienceLevel;
 		float maxHealth = 60.0F + level * 5.0F;
 		Objects.requireNonNull(player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(maxHealth);
+		player.heal(0f);
 
 	}
 
