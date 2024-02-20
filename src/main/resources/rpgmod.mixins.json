@@ -3,6 +3,10 @@
 	"package": "net.cleocyde.rpgmod.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
+		"CustomDamageMixin",
+		"NoHungerMixin",
+		"NoXpDropMixin",
+		"NoXpOrbsMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -16,15 +16,16 @@ public class LevelingSystem {
     private int experience;
     private int level;
     private int experienceNeededToLevelUp;
-
+    private CustomHealthSystem healthSystem;
     private ScoreboardObjective levelObjective;
     private ScoreboardObjective totalXpObjective;
     private ScoreboardObjective xpToNextLevelObjective;
 
-    public LevelingSystem(MinecraftServer server) {
+    public LevelingSystem(MinecraftServer server, CustomHealthSystem healthSystem) {
         this.experience = 0;
         this.level = 1;
         this.experienceNeededToLevelUp = 110;
+        this.healthSystem = healthSystem;
 
 
         // Create new objectives on the scoreboard for the player's level, total XP, and XP to next level.
@@ -61,7 +62,9 @@ public class LevelingSystem {
             this.experienceNeededToLevelUp = calculateExperienceNeededToLevelUp(nextLevel); // Calculate the experience needed for the next level
             this.level++;
 
-            player.heal(8000f);
+            // Call the levelUp method in the CustomHealthSystem class
+            this.healthSystem.levelUp(player, this.level);
+
             // If the player's level has reached 200 after leveling up.
             if (this.level >= 200) {
                 this.level = 200; // Ensure the level does not exceed 200.
@@ -123,10 +126,10 @@ public class LevelingSystem {
     }
 
 
-    public void updateActionBar(PlayerEntity player) {
+    /*public void updateActionBar(PlayerEntity player) {
         Text message = Text.literal("Level: " + this.level);
         player.sendMessage(message, true); // The second parameter indicates that this is an action bar message.
-    }
+    }*/
 
     // Add more methods for handling other events that should give experience.
 }
